@@ -21,7 +21,7 @@ test {
   my $set_res = $tester->request([[
     "Mailbox/set" => {
       destroy => [ $mailbox1->id ],
-      onDestroyRemoveMessages => JSON::true,
+      onDestroyRemoveEmails => JSON::true,
     },
   ]]);
 

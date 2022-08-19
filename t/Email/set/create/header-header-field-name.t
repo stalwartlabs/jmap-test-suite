@@ -22,9 +22,9 @@ test {
 
   subtest "asText" => sub {
     my @hlist = qw(
-      subject
-      comment
-      list-id
+      Subject
+      Comment
+      List-ID
       X-Foo
     );
 
@@ -120,7 +120,7 @@ test {
     my $url1 = "http://example.net";
     my $url2 = "http://example.org/" . ("a" x 35);
 
-    my $to_value = "<$url1>,\r\n <$url2>";
+    my $to_value = "<$url1>,\r\n\t<$url2>";
 
     my @hlist = qw(
       List-Help
@@ -217,13 +217,13 @@ sub create_and_check_header {
     [
       "Email/get" => {
         ids => [ $id ],
-        properties => [ "header:$header_name:asRaw:all" ],
+        properties => [ "header:$header_name:all" ],
       },
     ],
     superhashof({
       list => [
         superhashof({
-          "header:$header_name:asRaw:all" => $expect,
+          "header:$header_name:all" => $expect,
         }),
       ],
     }),

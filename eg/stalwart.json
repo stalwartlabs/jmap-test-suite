@@ -1,0 +1,17 @@
+{
+    "adapter": "Stalwart",
+    "base_uri": "http://localhost:8080",
+    "authentication_uri": "http://localhost:8080/.well-known/jmap",
+    "api_uri": "http://localhost:8080/jmap",
+    "accountId": "h",
+    "credentials": [
+        {
+            "accountId": "h",
+            "username": "jdoe@example.com",
+            "password": "secret",
+            "tester": {
+                "api_uri": "http://localhost:8080/.well-known/jmap"
+            }
+        }
+    ]
+}

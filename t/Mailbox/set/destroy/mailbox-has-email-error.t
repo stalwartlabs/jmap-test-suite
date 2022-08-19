@@ -7,9 +7,9 @@ test {
   my $tester  = $account->tester;
 
   for my $test (
-    [ 'implicit onDestroyRemoveMessages false' => {} ],
-    [ 'explicit onDestroyRemoveMessages false' => {
-        onDestroyRemoveMessages => JSON::false,
+    [ 'implicit onDestroyRemoveEmails false' => {} ],
+    [ 'explicit onDestroyRemoveEmails false' => {
+        onDestroyRemoveEmails => JSON::false,
       },
     ],
   ) {

@@ -22,7 +22,7 @@ test {
     [
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'mailboxIds' ],
+        properties => [ 'mailboxIds', 'id' ],
       },
     ],
     superhashof({

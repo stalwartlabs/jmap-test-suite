@@ -28,7 +28,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'attachments', 'hasAttachment', ],
+        properties => [ 'attachments', 'hasAttachment', 'id' ],
       },
     ]]);
     ok($res->is_success, "Email/get")
@@ -69,7 +69,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'attachments', 'hasAttachment', ],
+        properties => [ 'attachments', 'hasAttachment', 'id' ],
       },
     ]]);
     ok($res->is_success, "Email/get")

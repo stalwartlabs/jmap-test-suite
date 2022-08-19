@@ -1,12 +1,13 @@
 use jmaptest;
 
 # Can't have existing messages so must be pristine
-attr pristine => 1;
+#attr pristine => 1;
 
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
 
   my %mailboxes = (
     aaa => $account->create_mailbox({ name => "aaa" }),
@@ -31,10 +32,10 @@ test {
     }),
     aaa_large  => $mailboxes{aaa}->add_message({
       subject    => 'aaa_large',
-      body       => 'x' x (1000 * 500), # .5mb, roughly
+      body       => 'x' x (100 * 500), # .5mb, roughly
       headers    => [
         cc => 'cctest@example.com',
-        'x-foo' => 'bar',
+        'Keywords' => 'bar',
       ],
     }),
     aaa_keyword_some => $mailboxes{aaa}->add_message({
@@ -42,8 +43,8 @@ test {
       keywords => { some => jtrue() },
       headers    => [
         bcc => 'b.c.ctest@example.com',
-        'x-foo' => 'baz',
-        'x-bar' => 'bar',
+        'Keywords' => 'baz',
+        'Language' => 'bar',
       ],
     }),
     aaa_keyword_all => $mailboxes{aaa}->add_message({
@@ -100,6 +101,7 @@ test {
     {
       filter => { inMailbox => $mailboxes{aaa}->id },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => ids_for(%in_aaa), },
     $describer_sub,
@@ -113,6 +115,7 @@ test {
     {
       filter => { inMailboxOtherThan => [ $mailboxes{aaa}->id ] },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => ids_for(%in_bbb, %in_ccc, %in_ddd), },
     $describer_sub,
@@ -127,6 +130,7 @@ test {
         inMailboxOtherThan => [ $mailboxes{aaa}->id, $mailboxes{bbb}->id ]
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => ids_for(%in_ccc, %in_ddd), },
     $describer_sub,
@@ -142,6 +146,7 @@ test {
         before => '2017-10-10T05:05:05Z',
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $emails{aaa_old}->id, ], },
     $describer_sub,
@@ -157,6 +162,7 @@ test {
         after => '2040-02-02T05:04:03Z',
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $emails{aaa_future}->id, ], },
     $describer_sub,
@@ -169,9 +175,10 @@ test {
     "Email/query",
     {
       filter => {
-        minSize => 1000 * 450, # < .5mb
+        minSize => 100 * 450, # < .5mb
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $emails{aaa_large}->id, ], },
     $describer_sub,
@@ -184,9 +191,10 @@ test {
     "Email/query",
     {
       filter => {
-        maxSize => 1000 * 450, # < .5mb
+        maxSize => 100 * 450, # < .5mb
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [
@@ -200,7 +208,7 @@ test {
   # allInThreadHaveKeyword
   SKIP: {
     skip "No support for allInThreadHaveKeyword", 2
-      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Stalwart');
 
     $self->test_query(
       $account,
@@ -210,6 +218,7 @@ test {
           allInThreadHaveKeyword => 'some',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => [], # Only some have this keyword
@@ -226,6 +235,7 @@ test {
           allInThreadHaveKeyword => 'all',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => ids_for(
@@ -240,7 +250,7 @@ test {
   # someInThreadHaveKeyword
   SKIP: {
     skip "No support for someInThreadHaveKeyword", 2
-      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Stalwart');
 
     $self->test_query(
       $account,
@@ -250,6 +260,7 @@ test {
           someInThreadHaveKeyword => 'nope',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => [],
@@ -266,6 +277,7 @@ test {
           someInThreadHaveKeyword => 'some',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => ids_for(
@@ -280,7 +292,7 @@ test {
   # noneInThreadHaveKeyword
   SKIP: {
     skip "No support for noneInThreadHaveKeyword", 2
-      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+      if $self->server->isa('JMAP::TestSuite::ServerAdapter::Stalwart');
 
     $self->test_query(
       $account,
@@ -290,6 +302,7 @@ test {
           noneInThreadHaveKeyword => 'nope',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => ids_for(%emails),
@@ -306,6 +319,7 @@ test {
           noneInThreadHaveKeyword => 'some',
         },
         sort   => [{ property => 'subject', isAscending => jtrue()  }],
+        calculateTotal => jtrue(),
       },
       {
         ids => ids_for(
@@ -326,6 +340,7 @@ test {
         hasKeyword => 'some',
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [
@@ -346,6 +361,7 @@ test {
         notKeyword => 'some',
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => ids_for(
@@ -368,6 +384,7 @@ test {
         hasAttachment => jfalse(),
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [
@@ -386,6 +403,7 @@ test {
         hasAttachment => jtrue(),
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_with_attachment}->id ],
@@ -403,6 +421,7 @@ test {
         text => "here",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_future}->id ],
@@ -420,6 +439,7 @@ test {
         from => "fromtest",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_old}->id ],
@@ -437,6 +457,7 @@ test {
         to => "totest",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_future}->id ],
@@ -454,6 +475,7 @@ test {
         cc => "cctest",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_large}->id ],
@@ -471,6 +493,7 @@ test {
         bcc => "b.c.ctest",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_keyword_some}->id ],
@@ -488,6 +511,7 @@ test {
         subject => "aaa_future",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_future}->id ],
@@ -505,6 +529,7 @@ test {
         body => "test body thing",
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_old}->id ],
@@ -519,9 +544,10 @@ test {
     "Email/query",
     {
       filter => {
-        header => [ 'x-foo' ],
+        header => [ 'Keywords' ],
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_keyword_some}->id, $emails{aaa_large}->id ],
@@ -536,9 +562,10 @@ test {
     "Email/query",
     {
       filter => {
-        header => [ 'x-foo', 'bar' ],
+        header => [ 'Keywords', 'bar' ],
       },
       sort   => [{ property => 'subject', isAscending => jtrue()  }],
+      calculateTotal => jtrue(),
     },
     {
       ids => [ $emails{aaa_large}->id ],

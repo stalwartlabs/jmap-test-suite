@@ -53,7 +53,7 @@ test {
 
   my %body = (
     blobId      => jstr(),
-    charset     => 'us-ascii',
+    charset     => 'utf-8',
     cid         => 'fooz',
     disposition => undef,
     language    => [ 'US' ],

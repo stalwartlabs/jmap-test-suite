@@ -167,16 +167,16 @@ test {
               name  => 'Subject',
               value => re(qr/\Q$subject\E/),
             }, {
-              name  => 'Message-Id',
+              name  => 'Message-ID',
               value => re(qr/<.*>/),
             }, {
               name  => 'Sender',
               value => re(qr/\w/),
             }, {
-              name  => 'CC',
+              name  => 'Cc',
               value => re(qr/\w/),
             }, {
-              name  => 'BCC',
+              name  => 'Bcc',
               value => re(qr/\w/),
             }, {
               name  => 'Reply-To',
@@ -209,7 +209,7 @@ test {
       "Email/get" => {
         ids        => [ $reply->id ],
         properties => [qw(
-          threadId size preview
+          threadId size preview id
         )],
       },
     ]]);

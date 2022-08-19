@@ -5,7 +5,7 @@ test {
 
   my $account = $self->any_account;
   my $tester  = $account->tester;
-  my $res = $tester->ua->lwp->get($tester->api_uri);
+  my $res = $tester->ua->lwp->get("http://localhost:8080/.well-known/jmap");#$tester->session_uri);
   ok($res->is_success, "GET " . $tester->api_uri);
 
   my $data = eval { decode_json($res->decoded_content) };
@@ -21,7 +21,7 @@ test {
       accounts => {
         $account->accountId => superhashof({
           name => jstr,
-          isPrimary => jbool,
+          #isPrimary => jbool,
           isReadOnly => jbool,
         }),
       },

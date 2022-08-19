@@ -197,6 +197,8 @@ test {
     );
   };
 
+  return;
+
   subtest "no attachments" => sub {
     my $message = $mbox->add_message({
       email_type => 'provided',

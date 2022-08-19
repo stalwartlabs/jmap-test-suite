@@ -16,7 +16,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'bodyStructure', 'bodyValues' ],
+        properties => [ 'bodyStructure', 'bodyValues', 'id' ],
       },
     ]]);
     ok($res->is_success, "Email/get")
@@ -41,7 +41,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'bodyStructure', 'bodyValues' ],
+        properties => [ 'bodyStructure', 'bodyValues', 'id' ],
         fetchAllBodyValues => jfalse(),
       },
     ]]);
@@ -67,7 +67,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'bodyStructure', 'bodyValues' ],
+        properties => [ 'bodyStructure', 'bodyValues', 'id' ],
         fetchAllBodyValues => jtrue(),
       },
     ]]);

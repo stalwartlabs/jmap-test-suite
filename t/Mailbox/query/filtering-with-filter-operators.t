@@ -7,7 +7,8 @@ attr pristine => 1;
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
   my $tester  = $account->tester;
 
   my $mailbox1 = $account->create_mailbox({
@@ -63,6 +64,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $mailbox1->id ], },
     $describer_sub,
@@ -81,6 +83,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $mailbox2->id ], },
     $describer_sub,
@@ -104,6 +107,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $mailbox2->id ], },
     $describer_sub,
@@ -123,6 +127,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $mailbox1->id, $mailbox2->id ], },
     $describer_sub,
@@ -141,6 +146,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ @with_role_name_asc ], },
     $describer_sub,
@@ -159,6 +165,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ @all_name_asc ], },
     $describer_sub,
@@ -177,6 +184,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ $mailbox1->id, $mailbox2->id ], },
     $describer_sub,
@@ -195,6 +203,7 @@ test {
         ],
       },
       sort => [{ property => 'name', isAscending => JSON::true, }],
+      calculateTotal => jtrue(),
     },
     { ids => [ ], },
     $describer_sub,

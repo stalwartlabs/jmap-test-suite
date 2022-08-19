@@ -30,7 +30,6 @@ test {
       $res->single_sentence('Email/import')->arguments,
       {
         accountId  => jstr($account->accountId),
-        notCreated => {},
         created => {
           new => {
             blobId   => jstr(),

@@ -23,6 +23,14 @@ test {
 
   my $middle_state;
 
+  # When generating intermediate states, the server may choose how to
+  # divide up the changes.  For many types, it will provide a better user
+  # experience to return the more recent changes first, as this is more
+  # likely to be what the user is most interested in.  The client can
+  # then continue to page in the older changes while the user is viewing
+  # the newer data.  For example, suppose a server went through the
+  # following states:
+
   subtest "changes from start state" => sub {
     my $res = $tester->request([[
       "Email/changes" => {
@@ -40,7 +48,7 @@ test {
         oldState       => jstr($start_state),
         newState       => all(jstr, none($start_state, $end_state)),
         hasMoreChanges => jtrue,
-        created        => [ $message1->id ],
+        created        => [ $message2->id ],
         updated        => [],
         destroyed      => [],
       },
@@ -69,7 +77,7 @@ test {
         oldState       => jstr($middle_state),
         newState       => jstr($end_state),
         hasMoreChanges => jfalse,
-        created        => [ $message2->id ],
+        created        => [ $message1->id ],
         updated        => [],
         destroyed      => [],
       },

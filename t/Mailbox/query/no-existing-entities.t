@@ -7,15 +7,15 @@ attr pristine => 1;
 test {
   my ($self) = @_;
 
-  plan skip_all => "Cyrus requires at least one mailbox"
-    if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
-
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
   my $tester  = $account->tester;
 
   subtest "No arguments" => sub {
     my $res = $tester->request([[
-      "Mailbox/query" => {},
+      "Mailbox/query" => {
+        calculateTotal => jtrue(),
+      },
     ]]);
     ok($res->is_success, "Mailbox/query")
       or diag explain $res->response_payload;

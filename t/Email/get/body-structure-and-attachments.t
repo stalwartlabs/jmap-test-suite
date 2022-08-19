@@ -53,11 +53,15 @@ test {
       } elsif ($part->{type} =~ /^multipart\//) {
         $recurse->($recurse, $_) for @{ $part->{subParts} };
       } else {
+
         my $download_res = $tester->download({
           blobId    => $part->{blobId},
           accountId => $account->accountId,
           name      => "what.ever"
         });
+
+        #use Data::Dumper;
+        #print Dumper($download_res);
 
         ok($download_res->is_success, 'downloaded blob');
 
@@ -78,6 +82,7 @@ Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
 
 RFC822 message
+
 EOF
 
     # Download blob gives us \r\n

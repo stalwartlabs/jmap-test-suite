@@ -1,16 +1,19 @@
 use jmaptest;
 # Can't have existing entries so must be pristine
-attr pristine => 1;
+#attr pristine => 1;
 
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
   my $tester  = $account->tester;
 
   subtest "No arguments" => sub {
     my $res = $tester->request([[
-      "Email/query" => {},
+      "Email/query" => {
+          calculateTotal => jtrue(),
+      },
     ]]);
     ok($res->is_success, "Email/query")
       or diag explain $res->response_payload;

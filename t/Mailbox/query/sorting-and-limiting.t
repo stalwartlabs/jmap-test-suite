@@ -7,7 +7,8 @@ attr pristine => 1;
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
 
   my %mailboxes = (
     zzz => $account->create_mailbox({
@@ -54,7 +55,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'name', }], },
+    { sort => [{ property => 'name', }], calculateTotal => jtrue(),},
     { ids => \@name_asc, },
     $describer_sub,
     "sort by name, implicit ascending order (default)",
@@ -63,7 +64,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'name', isAscending => JSON::true, }], },
+    { sort => [{ property => 'name', isAscending => JSON::true, }], calculateTotal => jtrue(),},
     { ids => \@name_asc, },
     $describer_sub,
     "sort by name, explicit ascending order",
@@ -72,7 +73,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'name', isAscending => JSON::false, }], },
+    { sort => [{ property => 'name', isAscending => JSON::false, }], calculateTotal => jtrue(),},
     { ids => \@name_desc, },
     $describer_sub,
     "sort by name, explicit descending order",
@@ -82,7 +83,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'sortOrder', }], },
+    { sort => [{ property => 'sortOrder', }], calculateTotal => jtrue(),},
     { ids => \@sort_order_asc, },
     $describer_sub,
     "sort by sortOrder, implict ascending order"
@@ -91,7 +92,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'sortOrder', isAscending => JSON::true, }], },
+    { sort => [{ property => 'sortOrder', isAscending => JSON::true, }], calculateTotal => jtrue(),},
     { ids => \@sort_order_asc, },
     $describer_sub,
     "sort by sortOrder, explicit ascending order"
@@ -100,7 +101,7 @@ test {
   $self->test_query(
     $account,
     "Mailbox/query",
-    { sort => [{ property => 'sortOrder', isAscending => JSON::false, }], },
+    { sort => [{ property => 'sortOrder', isAscending => JSON::false, }], calculateTotal => jtrue(),},
     { ids => \@sort_order_desc, },
     $describer_sub,
     "sort by sortOrder, explicit descending order"
@@ -113,6 +114,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => 0,
+      calculateTotal => jtrue(),
     },
     { ids => \@name_asc, },
     $describer_sub,
@@ -126,6 +128,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => -1,
+      calculateTotal => jtrue(),
     },
     { ids => [ $name_asc[-1] ], position => $#name_asc, },
     $describer_sub,
@@ -138,6 +141,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => -3,
+      calculateTotal => jtrue(),
     },
     { ids => [ @name_asc[-3..-1] ], position => $#name_asc - 2, },
     $describer_sub,
@@ -151,6 +155,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => 1,
+      calculateTotal => jtrue(),
     },
     { ids => [ @name_asc[1..$#name_asc] ], position => 1, },
     $describer_sub,
@@ -163,6 +168,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => 3,
+      calculateTotal => jtrue(),
     },
     { ids => [ @name_asc[3..$#name_asc] ], position => 3, },
     $describer_sub,
@@ -176,6 +182,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => $#name_asc + 5,
+      calculateTotal => jtrue(),
     },
     { ids => [], position => 0, },
     $describer_sub,
@@ -189,6 +196,7 @@ test {
     {
       sort => [{ property => 'name', isAscending => JSON::true, }],
       position => $#name_asc - ($#name_asc + 10),
+      calculateTotal => jtrue(),
     },
     { ids => \@name_asc, position => 0, },
     $describer_sub,
@@ -220,6 +228,7 @@ test {
       {
         sort  => [{ property => 'name', isAscending => JSON::true, }],
         limit => @name_asc + 5,
+        calculateTotal => jtrue(),
       },
       { ids => \@name_asc, total => 0+@name_asc, },
       $describer_sub,
@@ -232,6 +241,7 @@ test {
       {
         sort  => [{ property => 'name', isAscending => JSON::true, }],
         limit => 0 + @name_asc,
+        calculateTotal => jtrue(),
       },
       { ids => \@name_asc, total => 0+@name_asc, },
       $describer_sub,
@@ -244,6 +254,7 @@ test {
       {
         sort  => [{ property => 'name', isAscending => JSON::true, }],
         limit => @name_asc - 2,
+        calculateTotal => jtrue(),
       },
       {
         ids => [ @name_asc[0..($#name_asc - 2)] ],
@@ -259,6 +270,7 @@ test {
       {
         sort  => [{ property => 'name', isAscending => JSON::true, }],
         limit => 0,
+        calculateTotal => jtrue(),
       },
       {
         ids => [ ],

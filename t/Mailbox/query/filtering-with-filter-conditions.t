@@ -8,7 +8,8 @@ attr pristine => 1;
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
   my $tester  = $account->tester;
 
   my $mailbox1 = $account->create_mailbox;

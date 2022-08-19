@@ -6,7 +6,8 @@ test {
   my $account = $self->any_account;
   my $tester  = $account->tester;
 
-  subtest "emails -> wrong form" => sub {
+=begin comment 
+ subtest "emails -> wrong form" => sub {
     for my $bad (undef, "none", ["foo"]) {
       my $res = $tester->request([[
         "Email/import" => {
@@ -39,6 +40,7 @@ test {
       "got error about bad 'emails'"
     ) or diag explain $res->as_stripped_triples;
   };
+=cut
 
   my $blob = $account->email_blob(generic => {});
   my $mailbox = $account->create_mailbox;

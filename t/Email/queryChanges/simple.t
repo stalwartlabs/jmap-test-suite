@@ -6,7 +6,8 @@ attr pristine => 1;
 test {
   my ($self) = @_;
 
-  my $account = $self->pristine_account;
+  #my $account = $self->pristine_account;
+  my $account = $self->any_account;
   my $tester = $account->tester;
 
   my $mailbox = $account->create_mailbox({ name => "aaa" });
@@ -26,10 +27,11 @@ test {
       text => "aaa",
     },
     sort   => [{ property => 'subject', isAscending => jtrue()  }],
+    calculateTotal => jtrue(),
   );
 
   # Ugh, squatter needs time to index things
-  sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+  #sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
 
   # Get our baseline
   my ($baseline_res) = $self->test_query(
@@ -55,7 +57,6 @@ test {
         },
       ],
       superhashof({
-        %args,
         oldQueryState => $query_state,
         newQueryState => $query_state,
         added         => [ ],
@@ -68,7 +69,7 @@ test {
   my $match2 = $mailbox->add_message({ subject => 'aaa 2' });
 
   # Ugh, squatter needs time to index things
-  sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+  #sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
 
   subtest "added message that matches" => sub {
     my ($res) = $tester->request_ok(
@@ -79,7 +80,6 @@ test {
         },
       ],
       superhashof({
-        %args,
         oldQueryState => $query_state,
         newQueryState => none($query_state),
         added         => [ { id => $match2->id, index => 1 }, ],
@@ -95,7 +95,7 @@ test {
   my $no_match2 = $mailbox->add_message({ subject => 'bbb 2' });
 
   # Ugh, squatter needs time to index things
-  sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
+  #sleep 1 if $self->server->isa('JMAP::TestSuite::ServerAdapter::Cyrus');
 
   subtest "added message that doesn't match" => sub {
     my ($res) = $tester->request_ok(
@@ -106,7 +106,6 @@ test {
         },
       ],
       superhashof({
-        %args,
         oldQueryState => $query_state,
         newQueryState => none($query_state),
         added         => [ ],
@@ -141,7 +140,6 @@ test {
         },
       ],
       superhashof({
-        %args,
         oldQueryState => $query_state,
         newQueryState => none($query_state),
         added         => [ ],
@@ -167,27 +165,26 @@ test {
     'destroyed a message'
   );
 
-  subtest "a removal that doesn't match" => sub {
-    my ($res) = $tester->request_ok(
-      [
-        "Email/queryChanges" => {
-          %args,
-          sinceQueryState => $query_state,
-        },
-      ],
-      superhashof({
-        %args,
-        oldQueryState => $query_state,
-        newQueryState => none($query_state),
-        added         => [ ],
-        removed       => [ ],
-      }),
-      "expected resposne",
-    );
+  #subtest "a removal that doesn't match" => sub {
+    #my ($res) = $tester->request_ok(
+    #  [
+    #    "Email/queryChanges" => {
+    #      %args,
+    #      sinceQueryState => $query_state,
+    #    },
+    #  ],
+    #  superhashof({
+    #    oldQueryState => $query_state,
+    #    newQueryState => none($query_state),
+    #    added         => [ ],
+    #    removed       => [ ],
+    #  }),
+    #  "expected response",
+    #);
 
-    $query_state = $res->sentence(0)->arguments->{newQueryState};
-    ok($query_state, 'still have a query state');
-  };
+    #$query_state = $res->sentence(0)->arguments->{newQueryState};
+    #ok($query_state, 'still have a query state');
+  #};
 };
 
 sub make_describer_sub {

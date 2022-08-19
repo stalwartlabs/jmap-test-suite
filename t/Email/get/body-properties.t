@@ -22,7 +22,7 @@ test {
     [[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'textBody' ],
+        properties => [ 'textBody', 'id' ],
       },
     ]],
     [[
@@ -53,7 +53,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'textBody' ],
+        properties => [ 'textBody', 'id' ],
         bodyProperties => [],
       },
     ]]);
@@ -78,7 +78,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'textBody' ],
+        properties => [ 'textBody', 'id' ],
         bodyProperties => [qw(
           partId blobId size headers name type charset disposition
           cid language location subParts
@@ -118,7 +118,7 @@ test {
                 name  => 'Subject',
                 value => re(qr/\Q$subject\E/),
               }, {
-                name  => 'Message-Id',
+                name  => 'Message-ID',
                 value => re(qr/<.*>/),
               }, {
                 name  => 'Date',
@@ -139,7 +139,7 @@ test {
     my $res = $tester->request([[
       "Email/get" => {
         ids        => [ $message->id ],
-        properties => [ 'textBody' ],
+        properties => [ 'textBody', 'id' ],
         bodyProperties => [qw(
           size name type
         )],

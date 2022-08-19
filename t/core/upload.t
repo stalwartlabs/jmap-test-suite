@@ -7,7 +7,7 @@ test {
   my $tester  = $account->tester;
 
   # First, grab our uploadUrl
-  my $res = $tester->ua->lwp->get($tester->api_uri);
+  my $res = $tester->ua->lwp->get("http://localhost:8080/.well-known/jmap");#$tester->session_uri);
   ok($res->is_success, "GET " . $tester->api_uri);
 
   my $data = eval { decode_json($res->decoded_content) };

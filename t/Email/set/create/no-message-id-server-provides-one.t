@@ -14,6 +14,7 @@ test {
         create => {
           new => {
             mailboxIds => { $mbox->id => \1, },
+            subject => 'foo',
           },
         },
       },
@@ -34,7 +35,7 @@ test {
     [
       "Email/get" => {
         ids => [ $created_id ],
-        properties => [ 'messageId' ],
+        properties => [ 'messageId', 'id' ],
       },
     ],
     superhashof({
